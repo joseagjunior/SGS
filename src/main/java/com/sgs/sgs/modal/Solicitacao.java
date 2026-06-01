@@ -30,4 +30,25 @@ public class Solicitacao {
 
     @Enumerated(EnumType.STRING)
     private EnumStatusSolicitacao status;
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Solicitante getSolicitante() { return solicitante; }
+    public void setSolicitante(Solicitante solicitante) { this.solicitante = solicitante; }
+
+    public Categoria getCategoria() { return categoria; }
+    public void setCategoria(Categoria categoria) { this.categoria = categoria; }
+
+    public String getDescricao() { return descricao; }
+    public void setDescricao(String descricao) { this.descricao = descricao; }
+
+    public BigDecimal getValor() { return valor; }
+    public void setValor(BigDecimal valor) { this.valor = valor; }
+
+    public LocalDate getDataSolicitacao() { return dataSolicitacao; }
+    public void setDataSolicitacao(LocalDate dataSolicitacao) { this.dataSolicitacao = dataSolicitacao; }
+
+    public EnumStatusSolicitacao getStatus() { return status; }
+    public void setStatus(EnumStatusSolicitacao status) { this.status = status; }
 }
