@@ -19,8 +19,8 @@ public interface SolicitacaoRepository extends JpaRepository<Solicitacao, Long> 
         	INNER JOIN categoria AS C ON C.id = S.categoria_id
         WHERE (:status IS NULL OR S.status = :status)
         	AND (:categoriaId IS NULL OR S.categoria_id = :categoriaId)
-        	AND (:dataInicio IS NULL OR S.data_solicitacao >= :dataInicio)
-        	AND (:dataFim IS NULL OR S.data_solicitacao <= :dataFim)
+        	AND (CAST(:dataInicio AS DATE) IS NULL OR S.data_solicitacao >= CAST(:dataInicio AS DATE))
+        	AND (CAST(:dataFim AS DATE) IS NULL OR S.data_solicitacao <= CAST(:dataFim AS DATE))
         ORDER BY S.data_solicitacao DESC
         """, nativeQuery = true)
     List<Object[]> listaComFiltros(
