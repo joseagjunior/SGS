@@ -3,7 +3,9 @@ package com.sgs.sgs.controller;
 import com.sgs.sgs.dto.SolicitacaoListagemDTO;
 import com.sgs.sgs.dto.SolicitacaoRequestDTO;
 import com.sgs.sgs.modal.EnumStatusSolicitacao;
+import com.sgs.sgs.modal.HistoricoSolicitacao;
 import com.sgs.sgs.modal.Solicitacao;
+import com.sgs.sgs.repository.HistoricoSolicitacaoRepository;
 import com.sgs.sgs.service.SolicitacaoService;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,8 +22,14 @@ import java.util.Map;
 @CrossOrigin(origins = "*")
 public class SolicitacaoController {
     private final SolicitacaoService service;
+    private final HistoricoSolicitacaoRepository historicoRepository;
 
-    public SolicitacaoController(SolicitacaoService service) { this.service = service; }
+    public SolicitacaoController(
+            SolicitacaoService service,
+            HistoricoSolicitacaoRepository historicoRepository) {
+        this.service = service;
+        this.historicoRepository = historicoRepository;
+    }
 
     @PostMapping
     public ResponseEntity<Solicitacao> cadastrar(@RequestBody @Valid SolicitacaoRequestDTO dto) {
@@ -39,13 +47,20 @@ public class SolicitacaoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Solicitacao> buscarPorId(@PathVariable Long Id) {
-        return ResponseEntity.ok(service.buscarPorId(Id));
+    public ResponseEntity<Solicitacao> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(service.buscarPorId(id));
     }
 
     @PatchMapping("/{id}/status")
     public ResponseEntity<Solicitacao> atualizarStatus(@PathVariable Long id, @RequestBody Map<String, String> body) {
         EnumStatusSolicitacao novoStatus = EnumStatusSolicitacao.valueOf(body.get("status"));
         return ResponseEntity.ok(service.atualizarStatus(id, novoStatus));
+    }
+
+    @GetMapping("/{id}/historico")
+    public ResponseEntity<List<HistoricoSolicitacao>> buscarHistorico(@PathVariable Long id) {
+        List<HistoricoSolicitacao> historico = historicoRepository
+                .findBySolicitacaoIdOrderByDataAlteracaoAsc(id);
+        return ResponseEntity.ok(historico);
     }
 }
